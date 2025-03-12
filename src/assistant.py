@@ -6,7 +6,7 @@ with minimal programming knowledge.
 """
 import os
 from typing import Dict, List, Optional, Tuple
-from src.api_client import ClaudeAPIClient
+from src.api_clients import create_api_client
 from src.code_analyzer import CodeAnalyzer
 from src.utils import format_code, extract_code
 

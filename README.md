@@ -1,143 +1,89 @@
-# AI Programming Assistant with Claude API
+# Multi-Model Support
 
-An AI-powered assistant that helps automate programming tasks by converting natural language task descriptions into executable Python code.
+The AI Programming Assistant now supports multiple AI model providers, allowing you to choose the best AI model for your needs.
 
-## Features
+## Supported Providers
 
-- 🧠 **AI-Powered Code Generation**: Leverages Claude API to generate high-quality Python code based on natural language task descriptions
-- 📚 **Code Templates**: Pre-built templates for common programming tasks
-- 🔍 **Code Analysis**: Identifies potential issues and suggests improvements
-- 💻 **User-Friendly Interface**: Both command-line and graphical interfaces for interacting with the assistant
-- 🛠️ **Customizable**: Easily extend with new templates and functionality
+- **Claude (Anthropic)**: Claude 3 Opus, Claude 3 Sonnet, Claude 3 Haiku
+- **OpenAI**: GPT-4o, GPT-4 Turbo, GPT-3.5 Turbo
+- **Google Gemini**: Gemini 1.5 Pro, Gemini 1.5 Flash
+- **Hugging Face**: Mixtral 8x7B, Llama 3 70B, Phi-3 Mini
+- **Grok (xAI)**: Grok-1
+- **Deepseek**: Deepseek Coder, Deepseek Chat
 
-## Project Structure
+## Setting Up API Keys
 
-```
-C:\ai_projects\DM_v2\
-│
-├── config\             # Configuration settings
-├── src\                # Core functionality
-├── ui\                 # User interface
-│   ├── interface.py    # Command-line interface
-│   └── gui_interface.py # Graphical user interface
-├── examples\           # Example usage
-├── templates\          # Pre-built code templates
-├── tests\              # Unit tests
-├── .env                # Environment variables (API keys)
-└── main.py             # Entry point
-```
+To use the different AI models, you'll need to provide the respective API keys:
 
-## Requirements
+1. Rename `.env.template` to `.env` in the project root directory
+2. Add your API keys for the providers you want to use
+3. Alternatively, use the "Set API Key" button in the UI to configure keys
 
-- Python 3.8+
-- Claude API key (Anthropic)
-- Required packages:
-  - anthropic
-  - python-dotenv
-  - colorama
-  - tkinter (usually comes with Python)
+The application will automatically store your API keys in the `.env` file.
 
-## Installation
+## Selecting Models in the UI
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/gerimantas/DM-v2.git
-   cd DM-v2
-   ```
+The application interface includes a model selector at the top of the window:
 
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+1. Choose a provider from the dropdown menu
+2. Select a specific model from that provider
+3. Click the "?" button to see information about the selected model
+4. Use the "Set API Key" button to configure your API key for the selected provider
 
-3. Set up your API key:
-   - Rename `.env.example` to `.env`
-   - Add your Claude API key to the `.env` file
+## Model Configuration
 
-## Usage
+Each provider offers different models with varying capabilities:
 
-### Command-Line Interface
+### Claude (Anthropic)
+- **Claude 3 Opus**: Most powerful model, best for complex tasks
+- **Claude 3 Sonnet**: Balance of intelligence and speed
+- **Claude 3 Haiku**: Fast model for everyday tasks
 
-Run the assistant with:
+### OpenAI
+- **GPT-4o**: Latest and most capable model
+- **GPT-4 Turbo**: Powerful general purpose model
+- **GPT-3.5 Turbo**: Efficient model for most tasks
 
-```
-python main.py
-```
+### Google Gemini
+- **Gemini 1.5 Pro**: Advanced multimodal model
+- **Gemini 1.5 Flash**: Faster, efficient version
 
-Then follow the prompts to describe your programming task.
+### Hugging Face
+- **Mixtral 8x7B**: High-quality mixture of experts model
+- **Llama 3 70B**: Meta's latest large language model
+- **Phi-3 Mini**: Compact but capable model
 
-### Graphical User Interface
+### Grok (xAI)
+- **Grok-1**: First generation Grok model
 
-Run the assistant with the graphical interface:
+### Deepseek
+- **Deepseek Coder**: Specialized for code generation
+- **Deepseek Chat**: General purpose chat model
+
+## Command-Line Model Selection
+
+When using the command-line interface, you can specify the provider and model:
 
 ```
-python main.py --gui
+python main.py --provider openai --model gpt-4o "Create a script that reads CSV files"
 ```
 
-Or directly:
+Or set a default in your `.env` file.
 
+## Programmatic Usage
+
+You can specify the provider and model when initializing the assistant:
+
+```python
+from src.assistant import ProgrammingAssistant
+
+# Create an assistant with a specific provider and model
+assistant = ProgrammingAssistant(provider="openai", model="gpt-4o")
+
+# Or change the model later
+assistant.set_model("gemini", "gemini-1.5-pro-latest")
+
+# Generate code
+response = assistant.generate_code("Create a script to download YouTube videos")
+print(response)
 ```
-python run_gui.py
-```
-
-The GUI provides:
-- Different modes for queries, task-to-code conversion, and code analysis
-- Syntax highlighting for code
-- Save/copy functionality for generated code
-- Tools for code explanation and simplification
-
-### Command Examples
-
-```
-# Generate code for file operations
-python main.py "Create a script that reads all text files in a directory and counts word frequency"
-
-# Generate code for data processing
-python main.py "Create a script to analyze stock price data for Microsoft"
-
-# Generate code for web interaction
-python main.py "Create a script to fetch current weather for London"
-```
-
-### Advanced Command-Line Usage
-
-For more advanced options, use the command-line interface in interactive mode:
-
-```
-python main.py --interactive
-```
-
-This provides additional commands for:
-- Template selection
-- Code analysis
-- Example browsing
-- Interactive mode
-
-## Extending the Assistant
-
-### Adding New Templates
-
-1. Create your template in the appropriate template file (`templates/file_operations.py`, etc.)
-2. Register the template in the template registry
-3. Update the template matching logic in `assistant.py`
-
-### Customizing Prompts
-
-Modify the system prompts in `config/settings.py` to customize how the AI generates code.
-
-## Testing
-
-Run tests with:
-
-```
-python -m unittest discover tests
-```
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Anthropic for the Claude API
-- Contributors to the open-source libraries used in this project
