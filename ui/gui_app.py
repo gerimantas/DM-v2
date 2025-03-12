@@ -17,6 +17,7 @@ from ui.components.main_window import create_main_window
 from ui.components.input_panel import create_input_panel
 from ui.components.output_panel import create_output_panel
 from ui.components.menu_bar import create_menu_bar
+from ui.components.model_selector import ModelSelector
 
 # Import handlers
 from ui.handlers.input_handlers import InputHandler
@@ -45,8 +46,28 @@ class ProgrammingAssistantGUI:
         self.root = ctk.CTk()
         create_main_window(self.root, "AI Programming Assistant", "900x700", min_size=(800, 600))
         
-        # Initialize the assistant
-        self.assistant = ProgrammingAssistant()
+        # Create frames
+        self.main_frame = ctk.CTkFrame(self.root)
+        self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        self.top_frame = ctk.CTkFrame(self.main_frame)
+        self.top_frame.pack(fill="x", padx=10, pady=(10, 5))
+        
+        self.bottom_frame = ctk.CTkFrame(self.main_frame)
+        self.bottom_frame.pack(fill="both", expand=True, padx=10, pady=(5, 10))
+        
+        # Create UI components
+        # Menu bar
+        self.menu_handler = MenuHandler(self)
+        create_menu_bar(self.root, self.menu_handler)
+        
+        # Model selector
+        self.model_selector_frame = ctk.CTkFrame(self.root)
+        self.model_selector_frame.pack(fill="x", padx=10, pady=5)
+        self.model_selector = ModelSelector(self.model_selector_frame, self._on_model_changed)
+        
+        # Initialize the assistant with default provider ("claude")
+        self.assistant = ProgrammingAssistant(provider="claude")
         
         # Initialize OCR helper
         self.ocr_helper = OCRHelper(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
@@ -65,21 +86,6 @@ class ProgrammingAssistantGUI:
         # Status variables
         self.processing = False
         self.use_ocr = True  # Default to use OCR for screenshots
-        
-        # Create frames
-        self.main_frame = ctk.CTkFrame(self.root)
-        self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
-        
-        self.top_frame = ctk.CTkFrame(self.main_frame)
-        self.top_frame.pack(fill="x", padx=10, pady=(10, 5))
-        
-        self.bottom_frame = ctk.CTkFrame(self.main_frame)
-        self.bottom_frame.pack(fill="both", expand=True, padx=10, pady=(5, 10))
-        
-        # Create UI components
-        # Menu bar
-        self.menu_handler = MenuHandler(self)
-        create_menu_bar(self.root, self.menu_handler)
         
         # Input panel
         input_components = create_input_panel(
@@ -111,6 +117,22 @@ class ProgrammingAssistantGUI:
         
         # OCR handler
         self.ocr_handler = OCRHandler(self)
+    
+    def _on_model_changed(self, provider, model):
+        """
+        Handle model selection changes.
+        
+        Args:
+            provider: The selected provider
+            model: The selected model
+        """
+        try:
+            # Update the assistant with the new model
+            self.assistant.set_model(provider, model)
+            self.status_label.configure(text=f"Model changed to {model}")
+        except Exception as e:
+            from ui.components.main_window import show_message_dialog
+            show_message_dialog(self.root, "Error", f"Failed to change model: {str(e)}")
         
     def _handle_paste(self, event):
         """Handle Ctrl+V paste event to check for images."""

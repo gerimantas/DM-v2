@@ -16,5 +16,15 @@ from ui.gui_app import ProgrammingAssistantGUI
 
 # Run the application
 if __name__ == "__main__":
-    app = ProgrammingAssistantGUI()
-    app.run()
+    try:
+        app = ProgrammingAssistantGUI()
+        app.run()
+    except Exception as e:
+        print(f"Error starting application: {str(e)}")
+        
+        # Print more detailed error info if available
+        import traceback
+        traceback.print_exc()
+        
+        # Keep the console window open on error
+        input("Press Enter to exit...")

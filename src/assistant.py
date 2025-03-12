@@ -13,18 +13,24 @@ from src.utils import format_code, extract_code
 
 class ProgrammingAssistant:
     """
-    AI Programming Assistant that leverages Claude API to help with programming tasks.
+    AI Programming Assistant that leverages multiple API providers to help with programming tasks.
     """
     
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, provider: str = "claude", model: Optional[str] = None, api_key: Optional[str] = None):
         """
         Initialize the Programming Assistant.
         
         Args:
-            api_key: The API key for Claude. If not provided, will try to get it from environment.
+            provider: The AI provider to use (default: "claude")
+            model: The model to use (optional)
+            api_key: The API key (optional)
         """
-        # Initialize API client
-        self.api_client = ClaudeAPIClient(api_key)
+        # Initialize API client using the factory
+        self.api_client = create_api_client(provider, api_key)
+        
+        # Set model if provided
+        if model:
+            self.api_client.set_model(model)
         
         # Initialize code analyzer
         self.code_analyzer = CodeAnalyzer()
@@ -41,6 +47,24 @@ class ProgrammingAssistant:
             "automation": "Automating tasks (scheduled jobs/repeated actions)",
             "calculation": "Performing calculations or data analysis"
         }
+    
+    def set_model(self, provider: str, model: str, api_key: Optional[str] = None):
+        """
+        Change the AI provider and model being used.
+        
+        Args:
+            provider: The AI provider to use
+            model: The model to use
+            api_key: The API key (optional)
+        """
+        # Initialize new API client using the factory
+        self.api_client = create_api_client(provider, api_key)
+        
+        # Set the model
+        self.api_client.set_model(model)
+        
+        # Clear conversation history as we're switching models
+        self.conversation_history = []
     
     def process_query(self, query: str) -> str:
         """

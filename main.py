@@ -7,6 +7,7 @@ import os
 import argparse
 from src.assistant import ProgrammingAssistant
 from ui.interface import CommandLineInterface
+from config.model_config import get_default_model_for_provider
 
 
 def parse_arguments():
@@ -14,6 +15,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="AI Programming Assistant")
     parser.add_argument("--interactive", action="store_true", help="Start in interactive mode")
     parser.add_argument("--gui", action="store_true", help="Start with graphical user interface")
+    parser.add_argument("--provider", type=str, default="claude", help="AI provider to use")
+    parser.add_argument("--model", type=str, help="Specific model to use")
     parser.add_argument("--query", type=str, help="Single query to the assistant")
     parser.add_argument("--task", type=str, help="Task description to convert to code")
     parser.add_argument("--file", type=str, help="File to analyze")
@@ -29,16 +32,22 @@ def main():
     if args.gui:
         try:
             # Import custom GUI here to avoid loading CustomTkinter unnecessarily
-            from ui.custom_gui import main as run_gui
-            run_gui()
+            from ui.gui_app import ProgrammingAssistantGUI
+            app = ProgrammingAssistantGUI()
+            app.run()
             return
         except ImportError as e:
             print(f"Error loading GUI: {e}")
             print("Falling back to interactive command-line mode.")
             args.interactive = True
     
-    # Initialize the assistant
-    assistant = ProgrammingAssistant()
+    # Get the model if specified
+    model = None
+    if args.model:
+        model = args.model
+    
+    # Initialize the assistant with specified provider and model
+    assistant = ProgrammingAssistant(provider=args.provider, model=model)
     
     # Initialize the UI
     ui = CommandLineInterface(assistant)
@@ -75,3 +84,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExiting AI Programming Assistant...")
         sys.exit(0)
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        sys.exit(1)
