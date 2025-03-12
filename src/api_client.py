@@ -1,17 +1,17 @@
 """
-API Client for interacting with the Claude API.
-Handles authentication, requests, and responses.
+Workaround API Client for interacting with the Claude API.
 """
 import os
 from typing import Dict, Any, Optional, List
-from anthropic import Anthropic
+import requests
+import json
 from dotenv import load_dotenv
 from pathlib import Path
 
-
 class ClaudeAPIClient:
     """
-    Client for interacting with the Claude API.
+    Client for interacting with the Claude API using direct HTTP requests
+    instead of the Anthropic library to avoid compatibility issues.
     """
     
     def __init__(self, api_key: Optional[str] = None):
@@ -20,7 +20,7 @@ class ClaudeAPIClient:
         
         Args:
             api_key (str, optional): Claude API key. If not provided, it will be read from
-                                 the environment variable or .env file.
+                                the environment variable or .env file.
         """
         # Try to load from .env file explicitly
         # Get the project root directory
@@ -45,9 +45,11 @@ class ClaudeAPIClient:
                 "environment variable in your .env file."
             )
         
-        # Initialize the Anthropic client
-        self.client = Anthropic(api_key=self.api_key)
+        # Set default model
         self.model = os.getenv('CLAUDE_MODEL', 'claude-3-sonnet-20240229')
+        
+        # API endpoint
+        self.api_endpoint = "https://api.anthropic.com/v1/messages"
     
     def set_model(self, model_name: str) -> None:
         """
@@ -85,23 +87,43 @@ class ClaudeAPIClient:
             # Use provided system prompt or default
             system_instruction = system_prompt or default_system_prompt
             
-            # Make the API call
-            message = self.client.messages.create(
-                model=self.model,
-                system=system_instruction,
-                max_tokens=max_tokens,
-                messages=[
+            # Prepare the API request
+            headers = {
+                "Content-Type": "application/json",
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01"
+            }
+            
+            data = {
+                "model": self.model,
+                "system": system_instruction,
+                "max_tokens": max_tokens,
+                "messages": [
                     {"role": "user", "content": prompt}
                 ]
+            }
+            
+            # Make the API call
+            response = requests.post(
+                self.api_endpoint,
+                headers=headers,
+                json=data
             )
             
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            
+            # Parse the response
+            result = response.json()
+            
             # Extract and return the response text
-            return message.content[0].text
+            return result["content"][0]["text"]
         
         except Exception as e:
             # Handle API errors
             error_msg = f"Error when calling Claude API: {str(e)}"
             print(error_msg)
+            if hasattr(e, 'response') and hasattr(e.response, 'text'):
+                print(f"API response: {e.response.text}")
             return f"I encountered an error: {error_msg}. Please check your API key and network connection."
     
     def generate_response_with_history(self, 
@@ -131,19 +153,39 @@ class ClaudeAPIClient:
             # Use provided system prompt or default
             system_instruction = system_prompt or default_system_prompt
             
+            # Prepare the API request
+            headers = {
+                "Content-Type": "application/json",
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01"
+            }
+            
+            data = {
+                "model": self.model,
+                "system": system_instruction,
+                "max_tokens": max_tokens,
+                "messages": messages
+            }
+            
             # Make the API call
-            message = self.client.messages.create(
-                model=self.model,
-                system=system_instruction,
-                max_tokens=max_tokens,
-                messages=messages
+            response = requests.post(
+                self.api_endpoint,
+                headers=headers,
+                json=data
             )
             
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            
+            # Parse the response
+            result = response.json()
+            
             # Extract and return the response text
-            return message.content[0].text
+            return result["content"][0]["text"]
         
         except Exception as e:
             # Handle API errors
             error_msg = f"Error when calling Claude API: {str(e)}"
             print(error_msg)
+            if hasattr(e, 'response') and hasattr(e.response, 'text'):
+                print(f"API response: {e.response.text}")
             return f"I encountered an error: {error_msg}. Please check your API key and network connection."

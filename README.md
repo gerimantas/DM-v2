@@ -7,7 +7,7 @@ An AI-powered assistant that helps automate programming tasks by converting natu
 - 🧠 **AI-Powered Code Generation**: Leverages Claude API to generate high-quality Python code based on natural language task descriptions
 - 📚 **Code Templates**: Pre-built templates for common programming tasks
 - 🔍 **Code Analysis**: Identifies potential issues and suggests improvements
-- 💻 **User-Friendly Interface**: Simple command-line interface for interacting with the assistant
+- 💻 **User-Friendly Interface**: Both command-line and graphical interfaces for interacting with the assistant
 - 🛠️ **Customizable**: Easily extend with new templates and functionality
 
 ## Project Structure
@@ -18,6 +18,8 @@ C:\ai_projects\DM_v2\
 ├── config\             # Configuration settings
 ├── src\                # Core functionality
 ├── ui\                 # User interface
+│   ├── interface.py    # Command-line interface
+│   └── gui_interface.py # Graphical user interface
 ├── examples\           # Example usage
 ├── templates\          # Pre-built code templates
 ├── tests\              # Unit tests
@@ -29,6 +31,11 @@ C:\ai_projects\DM_v2\
 
 - Python 3.8+
 - Claude API key (Anthropic)
+- Required packages:
+  - anthropic
+  - python-dotenv
+  - colorama
+  - tkinter (usually comes with Python)
 
 ## Installation
 
@@ -49,7 +56,7 @@ C:\ai_projects\DM_v2\
 
 ## Usage
 
-### Basic Usage
+### Command-Line Interface
 
 Run the assistant with:
 
@@ -58,6 +65,26 @@ python main.py
 ```
 
 Then follow the prompts to describe your programming task.
+
+### Graphical User Interface
+
+Run the assistant with the graphical interface:
+
+```
+python main.py --gui
+```
+
+Or directly:
+
+```
+python run_gui.py
+```
+
+The GUI provides:
+- Different modes for queries, task-to-code conversion, and code analysis
+- Syntax highlighting for code
+- Save/copy functionality for generated code
+- Tools for code explanation and simplification
 
 ### Command Examples
 
@@ -72,12 +99,12 @@ python main.py "Create a script to analyze stock price data for Microsoft"
 python main.py "Create a script to fetch current weather for London"
 ```
 
-### Advanced Usage
+### Advanced Command-Line Usage
 
-For more advanced options, use the UI module:
+For more advanced options, use the command-line interface in interactive mode:
 
 ```
-python -m ui.interface
+python main.py --interactive
 ```
 
 This provides additional commands for:

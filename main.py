@@ -13,6 +13,7 @@ def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="AI Programming Assistant")
     parser.add_argument("--interactive", action="store_true", help="Start in interactive mode")
+    parser.add_argument("--gui", action="store_true", help="Start with graphical user interface")
     parser.add_argument("--query", type=str, help="Single query to the assistant")
     parser.add_argument("--task", type=str, help="Task description to convert to code")
     parser.add_argument("--file", type=str, help="File to analyze")
@@ -23,6 +24,18 @@ def main():
     """Main function to run the assistant."""
     # Parse command line arguments
     args = parse_arguments()
+    
+    # Check if GUI mode is requested
+    if args.gui:
+        try:
+            # Import custom GUI here to avoid loading CustomTkinter unnecessarily
+            from ui.custom_gui import main as run_gui
+            run_gui()
+            return
+        except ImportError as e:
+            print(f"Error loading GUI: {e}")
+            print("Falling back to interactive command-line mode.")
+            args.interactive = True
     
     # Initialize the assistant
     assistant = ProgrammingAssistant()
