@@ -1,6 +1,6 @@
 Project Structure: DM_v2
 =======================
-Generated on: 2025-03-12 13:31:14
+Generated on: 2025-03-12 15:23:17
 Root directory: C:\ai_projects\DM_v2
 
 └── DM_v2/
@@ -12,7 +12,7 @@ Root directory: C:\ai_projects\DM_v2
     │   └── example_usage.py - 2.5 KB, Last modified: 2025-03-12 12:20:02
     ├── src/
     │   ├── __init__.py - 57 B, Last modified: 2025-03-12 11:56:58
-    │   ├── api_client.py - 5.7 KB, Last modified: 2025-03-12 13:27:23
+    │   ├── api_client.py - 7.1 KB, Last modified: 2025-03-12 15:01:17
     │   ├── assistant.py - 12.1 KB, Last modified: 2025-03-12 11:29:51
     │   ├── code_analyzer.py - 5.1 KB, Last modified: 2025-03-12 11:36:04
     │   └── utils.py - 4.6 KB, Last modified: 2025-03-12 11:36:04
@@ -27,14 +27,24 @@ Root directory: C:\ai_projects\DM_v2
     │   └── test_assistant.py - 7.0 KB, Last modified: 2025-03-12 12:26:26
     ├── ui/
     │   ├── __init__.py - 57 B, Last modified: 2025-03-12 11:56:58
-    │   └── interface.py - 12.3 KB, Last modified: 2025-03-12 11:36:06
-    ├── README.md - 2.9 KB, Last modified: 2025-03-12 12:27:28
+    │   ├── custom_gui.py - 22.6 KB, Last modified: 2025-03-12 14:37:05
+    │   ├── gui_interface.py - 19.2 KB, Last modified: 2025-03-12 14:24:16
+    │   └── interface.py - 12.3 KB, Last modified: 2025-03-12 14:23:20
+    ├── venv_new/
+    │   ├── Include/
+    │   ├── Lib/
+    │   ├── Scripts/
+    │   │   ├── Activate.ps1 - 25.6 KB, Last modified: 2025-03-12 14:54:46
+    │   │   ├── activate - 2.3 KB, Last modified: 2025-03-12 14:54:46
+    │   │   ├── activate.bat - 1006 B, Last modified: 2025-03-12 14:54:46
+    │   │   └── deactivate.bat - 393 B, Last modified: 2025-03-12 14:54:46
+    │   └── pyvenv.cfg - 272 B, Last modified: 2025-03-12 14:54:41
+    ├── README.md - 3.6 KB, Last modified: 2025-03-12 14:24:38
     ├── api_client_fix.py - 1.6 KB, Last modified: 2025-03-12 13:10:06
     ├── check_files.ps1 - 2.3 KB, Last modified: 2025-03-12 11:43:39
-    ├── main.py - 1.9 KB, Last modified: 2025-03-12 11:27:38
+    ├── main.py - 2.4 KB, Last modified: 2025-03-12 14:38:06
     ├── project_scanner.py - 4.9 KB, Last modified: 2025-03-12 12:37:59
-    ├── project_structure.txt - 2.0 KB, Last modified: 2025-03-12 12:38:04
-    ├── requirements.txt - 56 B, Last modified: 2025-03-12 11:29:51
+    ├── project_structure.txt - 2.3 KB, Last modified: 2025-03-12 13:45:58
+    ├── requirements.txt - 75 B, Last modified: 2025-03-12 14:38:36
+    ├── run_gui.py - 319 B, Last modified: 2025-03-12 14:37:42
     └── test_env.py - 1.9 KB, Last modified: 2025-03-12 13:28:31
-
-    
